@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Calculate your daily calorie needs and track your food intake with this easy-to-use calorie tracker. Uses the Mifflin-St Jeor equation for accurate BMR and TDEE calculations.">
+    <title>CalorieTrack - Your Daily Calorie Calculator & Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <span class="logo-icon">🔥</span>
+                <h1>CalorieTrack</h1>
+            </div>
+            <div class="header-controls">
+                <button id="deviceToggle" class="toggle-btn" aria-label="Toggle device view">
+                    <span class="device-icon">💻</span>
+                    <span class="device-label">Desktop</span>
+                </button>
+                <button id="unitToggle" class="toggle-btn" aria-label="Toggle units">
+                    <span class="toggle-label">kg/cm</span>
+                </button>
+                <button id="themeToggle" class="toggle-btn" aria-label="Toggle dark mode">
+                    <span class="theme-icon">🌙</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- Calculator Section -->
+        <section class="card calculator-card">
+            <div class="card-header">
+                <h2>Calculate Your Daily Calories</h2>
+                <p class="card-subtitle">Enter your details to find your personalized calorie target</p>
+            </div>
+
+            <form id="calorieForm" class="calculator-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="weight">Weight</label>
+                        <div class="input-with-unit">
+                            <input type="number" id="weight" min="20" max="300" step="0.1" required placeholder="70">
+                            <span class="unit-label" id="weightUnit">kg</span>
+                        </div>
+                        <span class="input-hint" id="weightHint">20-300 kg</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="height">Height</label>
+                        <div class="input-with-unit">
+                            <input type="number" id="height" min="100" max="250" step="0.1" required placeholder="175">
+                            <span class="unit-label" id="heightUnit">cm</span>
+                        </div>
+                        <span class="input-hint" id="heightHint">100-250 cm</span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="age">Age</label>
+                        <div class="input-with-unit">
+                            <input type="number" id="age" min="15" max="100" required placeholder="30">
+                            <span class="unit-label">years</span>
+                        </div>
+                        <span class="input-hint">15-100 years</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Sex</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="sex" value="male" checked>
+                                <span class="radio-custom"></span>
+                                Male
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="sex" value="female">
+                                <span class="radio-custom"></span>
+                                Female
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="activity">Activity Level</label>
+                    <select id="activity" required>
+                        <option value="1.2">Sedentary (little or no exercise)</option>
+                        <option value="1.375">Lightly active (1-3 days/week)</option>
+                        <option value="1.55" selected>Moderately active (3-5 days/week)</option>
+                        <option value="1.725">Very active (6-7 days/week)</option>
+                    </select>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Goal</label>
+                    <div class="goal-options">
+                        <label class="goal-option">
+                            <input type="radio" name="goal" value="-500">
+                            <span class="goal-card">
+                                <span class="goal-icon">📉</span>
+                                <span class="goal-title">Lose Weight</span>
+                                <span class="goal-desc">-500 kcal/day</span>
+                            </span>
+                        </label>
+                        <label class="goal-option">
+                            <input type="radio" name="goal" value="0" checked>
+                            <span class="goal-card">
+                                <span class="goal-icon">⚖️</span>
+                                <span class="goal-title">Maintain</span>
+                                <span class="goal-desc">No change</span>
+                            </span>
+                        </label>
+                        <label class="goal-option">
+                            <input type="radio" name="goal" value="300">
+                            <span class="goal-card">
+                                <span class="goal-icon">💪</span>
+                                <span class="goal-title">Gain Weight</span>
+                                <span class="goal-desc">+300 kcal/day</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="calculateBtn">
+                    Calculate My Calories
+                </button>
+            </form>
+        </section>
+
+        <!-- Results Section (Hidden initially) -->
+        <section class="card results-card" id="resultsCard" hidden>
+            <div class="card-header">
+                <h2>Your Daily Target</h2>
+            </div>
+
+            <div class="results-display">
+                <div class="main-result">
+                    <span class="result-value" id="dailyCalories">0</span>
+                    <span class="result-unit">kcal/day</span>
+                </div>
+
+                <div class="result-details">
+                    <div class="detail-item">
+                        <span class="detail-label">BMR</span>
+                        <span class="detail-value" id="bmrValue">0 kcal</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">TDEE</span>
+                        <span class="detail-value" id="tdeeValue">0 kcal</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Goal Adjustment</span>
+                        <span class="detail-value" id="goalAdjustment">0 kcal</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tracker Section (Hidden initially) -->
+        <section class="card tracker-card" id="trackerCard" hidden>
+            <div class="card-header">
+                <h2>Today's Intake</h2>
+                <span class="date-display" id="currentDate"></span>
+            </div>
+
+            <!-- Progress Section -->
+            <div class="progress-section">
+                <div class="progress-stats">
+                    <div class="stat consumed">
+                        <span class="stat-value" id="consumedCalories">0</span>
+                        <span class="stat-label">Consumed</span>
+                    </div>
+                    <div class="stat remaining">
+                        <span class="stat-value" id="remainingCalories">0</span>
+                        <span class="stat-label">Remaining</span>
+                    </div>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progressBar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-labels">
+                        <span>0</span>
+                        <span id="progressMax">0 kcal</span>
+                    </div>
+                </div>
+                <div class="warning-message" id="warningMessage" hidden>
+                    ⚠️ You've exceeded your daily calorie limit!
+                </div>
+            </div>
+
+            <!-- Add Food Form -->
+            <form id="addFoodForm" class="add-food-form">
+                <div class="food-inputs">
+                    <div class="form-group">
+                        <label for="foodName">Food Name</label>
+                        <input type="text" id="foodName" placeholder="e.g., Chicken Salad" required>
+                    </div>
+                    <div class="form-group calories-input">
+                        <label for="foodCalories">Calories</label>
+                        <input type="number" id="foodCalories" min="1" max="5000" placeholder="250" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-secondary" id="addFoodBtn">
+                    + Add Entry
+                </button>
+            </form>
+
+            <!-- Food Log -->
+            <div class="food-log" id="foodLog">
+                <div class="log-header">
+                    <h3>Food Log</h3>
+                    <button type="button" class="btn btn-text" id="resetDayBtn">Reset Day</button>
+                </div>
+                <ul class="food-list" id="foodList">
+                    <!-- Food entries will be added here dynamically -->
+                </ul>
+                <div class="empty-state" id="emptyState">
+                    <span class="empty-icon">🍽️</span>
+                    <p>No food entries yet. Add your first meal!</p>
+                </div>
+            </div>
+        </section>
+
+     
+ <script data-name="BMC-Widget" data-cfasync="false"
+                src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="nswhscinsir"
+                data-description="Support me on Buy me a coffee!" data-message="Found it useful? Buy me an Espresso ☕"
+                data-color="#40DCA5" data-position="Right" data-x_margin="18" data-y_margin="18">
+                </script>
+
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>CalorieTrack uses the Mifflin-St Jeor equation for accurate BMR calculations.</p>
+        <p class="disclaimer">This tool is for informational purposes only. Consult a healthcare professional for
+            personalized advice.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
